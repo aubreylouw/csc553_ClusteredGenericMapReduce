@@ -1,0 +1,84 @@
+import akka.actor.{ActorPath, RootActorPath}
+import implementations.{countIncidentEdgesDataFetchFuncFactory, countIncidentEdgesMapFuncFactory, countIncidentEdgesReduceFuncFactory, reverseIndexReduceFuncFactory, _}
+import messages.MapReduceJob
+
+import scala.util.Random
+
+case "wordCount" => {
+
+  if (ticked) {
+    log.info("[" + akka.serialization.Serialization.serializedActorPath(self) + "] received tick")
+    val jobID: Int = new Random(Integer.MAX_VALUE).nextInt()
+    log.info("[" + akka.serialization.Serialization.serializedActorPath(self) + "] generated MapReduceJob#" + jobID)
+
+    if (nodes.size >= 3 && serviceSystem.isDefined) {
+      val serviceSystemPath: ActorPath = RootActorPath(serviceSystem.get) / "user" / "service"
+      context.system.actorSelection(serviceSystemPath) ! MapReduceJob(jobID,
+        List[String](
+          "C:\\Users\\louwae\\Desktop\\CSC536\\CSC536 Homework1_ael.txt",
+          "C:\\Users\\louwae\\Desktop\\CSC536\\CSC536 Homework2_ael.txt",
+          "C:\\Users\\louwae\\Desktop\\CSC536\\CSC536 Homework4_ael.txt",
+          "C:\\Users\\louwae\\Desktop\\CSC536\\CSC536 Homework5_ael.txt",
+          "C:\\Users\\louwae\\Desktop\\CSC536\\CSC536 Homework6_ael.txt"),
+        wordCountDataFetchFuncFactory,
+        wordCountMapFuncFactory,
+        wordCountReduceFuncFactory);
+    }
+  }
+  ticked = false
+}
+
+case "reverseIndex" => {
+
+  if (ticked) {
+
+    log.info("[" + akka.serialization.Serialization.serializedActorPath(self) + "] received tick")
+
+    val jobID: Int = new Random(Integer.MAX_VALUE).nextInt()
+
+    log.info("[" + akka.serialization.Serialization.serializedActorPath(self) + "] generated MapReduceJob#" + jobID)
+
+    if (nodes.size >= 3 && serviceSystem.isDefined) {
+      val serviceSystemPath: ActorPath = RootActorPath(serviceSystem.get) / "user" / "service"
+      context.system.actorSelection(serviceSystemPath) ! MapReduceJob(jobID,
+        List[String](
+          "C:\\Users\\louwae\\Desktop\\CSC536\\CSC536 Homework1_ael.txt",
+          "C:\\Users\\louwae\\Desktop\\CSC536\\CSC536 Homework2_ael.txt",
+          "C:\\Users\\louwae\\Desktop\\CSC536\\CSC536 Homework4_ael.txt",
+          "C:\\Users\\louwae\\Desktop\\CSC536\\CSC536 Homework5_ael.txt",
+          "C:\\Users\\louwae\\Desktop\\CSC536\\CSC536 Homework6_ael.txt",
+          "C:\\Users\\louwae\\Desktop\\CSC536\\CSC536 Homework9_ael.txt"),
+        reverseIndexDataFetchFuncFactory,
+        reverseIndexMapFuncFactory,
+        reverseIndexReduceFuncFactory);
+    }
+  }
+  ticked = false
+}
+
+case "pageRank" => {
+
+  if (ticked) {
+
+    log.info("[" + akka.serialization.Serialization.serializedActorPath(self) + "] received tick")
+
+    val jobID: Int = new Random(Integer.MAX_VALUE).nextInt()
+
+    log.info("[" + akka.serialization.Serialization.serializedActorPath(self) + "] generated MapReduceJob#" + jobID)
+
+    if (nodes.size >= 3 && serviceSystem.isDefined) {
+      val serviceSystemPath: ActorPath = RootActorPath(serviceSystem.get) / "user" / "service"
+      context.system.actorSelection(serviceSystemPath) ! MapReduceJob(jobID,
+        List[String](
+          "C:\\Users\\louwae\\Desktop\\CSC536\\pagerank_files\\one.html",
+          "C:\\Users\\louwae\\Desktop\\CSC536\\pagerank_files\\two.html",
+          "C:\\Users\\louwae\\Desktop\\CSC536\\pagerank_files\\three.html",
+          "C:\\Users\\louwae\\Desktop\\CSC536\\pagerank_files\\four.html",
+          "C:\\Users\\louwae\\Desktop\\CSC536\\pagerank_files\\five.html"),
+        countIncidentEdgesDataFetchFuncFactory,
+        countIncidentEdgesMapFuncFactory,
+        countIncidentEdgesReduceFuncFactory);
+    }
+  }
+  ticked = false
+}
